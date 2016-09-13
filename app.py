@@ -1,10 +1,12 @@
-
+import sys,os
+import psycopg2 as psql
 import json
 import requests
 from relay import relay
 from flask import Flask
 from water import water
 from turn import turn
+from flask import jsonify
 
 
 app = Flask(__name__)
@@ -40,10 +42,6 @@ def test():
    
     return s_data
 
-#@app.route('/', methods=['POST'])
-#def posts ():
-#   relay()
-#   return "finished"
 @app.route('/water', methods=['POST'])
 def watering ():
    water()
@@ -52,6 +50,20 @@ def watering ():
 def turning ():
    turn()
    return "finished turn"
+   
+@app.route('/data', methods=['GET'])
+def data():
+   conn = psql.connect("dbname=piData")
+   cur = conn.cursor()
+   cur.execute("Select * from data") 
+   #r = [dict((cur.description[i][0], value) \
+   #            for i, value in enumerate(row)) for row in cur.fetchall()]
+   #conn.close()
+   #return jsonify(**r[0])
+   x= dict([("data", cur.fetchall())])
+   conn.close()
+   return jsonify(x)
+   
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
