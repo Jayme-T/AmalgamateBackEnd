@@ -10,6 +10,7 @@ def gettemp():
 
    #print ">>> mysht1x.read_temperature_C()"
    temp = mysht1x.read_temperature_C()
+   #print temp
    #GPIO.cleanup()
    return temp
 def getrh():
@@ -23,11 +24,11 @@ def getrh():
 def getdewPoint(temp, rh):
    mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
    dewPoint = mysht1x.calculate_dew_point(temp, rh)
-#print "dewpoint=", dewPoint
+   #print "dewpoint=", dewPoint
    return dewPoint
 
 def getserial():
-  # Extract serial from cpuinfo file
+   #Extract serial from cpuinfo file
   cpuserial = "0000000000000000"
   try:
     f = open('/proc/cpuinfo','r')

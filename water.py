@@ -16,7 +16,7 @@ def water():
 
    # time to sleep between operations in the main loop
 
-   SleepTimeL = 3
+   SleepTimeL = 5
 
    # main loop
 

@@ -7,10 +7,13 @@ from flask import Flask
 from water import water
 from turn import turn
 from flask import jsonify
+from sensors import getserial
+from flask import request 
 
 
 app = Flask(__name__)
-
+from flask.ext.bcrypt import Bcrypt
+bcrypt=Bcrypt(app)
 @app.route('/test', methods=['GET'])
 def index():
     return "test"
@@ -49,7 +52,7 @@ def watering ():
 @app.route('/turn', methods=['POST'])
 def turning ():
    turn()
-   return "finished turn"
+   #return "finished turn"
    
 @app.route('/data', methods=['GET'])
 def data():
@@ -63,7 +66,37 @@ def data():
    x= dict([("data", cur.fetchall())])
    conn.close()
    return jsonify(x)
-   
+
+@app.route('/register', methods=['POST'])
+
+def register():
+  
+   userinfo=request.data.split("=")
+   password=userinfo[2]
+   u_name=userinfo[1].split("&")[0]
+   #print u_name, password
+   pw_hash = bcrypt.generate_password_hash(password)
+   #print pw_hash
+   conn = psql.connect("dbname=piData")
+   cur = conn.cursor()
+   cur.execute("INSERT into users(u_name, password, serial_id) VALUES (%s, %s, %s)", (u_name, pw_hash, getserial()))
+   conn.commit()
+   conn.close()
+   return "Inserted"
+@app.route('/login', methods=['POST'])
+def login():
+   userinfo=request.data.split("=")
+   password=userinfo[2]
+   u_name=userinfo[1].split("&")[0]
+   conn = psql.connect("dbname=piData")
+   cur = conn.cursor()
+   cur.execute("SELECT * from users where (u_name) =(%s)", [u_name])
+   x= dict([("data", cur.fetchall())])
+   #pw_hash= jsonify(x).data[0][0][1]
+   conn.close()
+   #print bcrypt.check_password_hash(pw_hash, password)
+   return jsonify(x)
+   #bcrypt.check_password_hash(pw_hash, password)
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')

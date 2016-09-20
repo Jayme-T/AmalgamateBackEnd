@@ -22,31 +22,31 @@ def relay():
 
    try:
      GPIO.output(2, GPIO.LOW)
-     print "ONE"
+     #print "ONE"
      time.sleep(SleepTimeL); 
      GPIO.output(3, GPIO.LOW)
-     print "TWO"
+     #print "TWO"
      time.sleep(SleepTimeL);  
-   #  GPIO.output(4, GPIO.LOW)
-   #  print "THREE"
-   #  time.sleep(SleepTimeL);
-   #  GPIO.output(17, GPIO.LOW)
-   #  print "FOUR"
-   #  time.sleep(SleepTimeL);
-   #  GPIO.output(27, GPIO.LOW)
-   #  print "FIVE"
-   #  time.sleep(SleepTimeL);
-   #  GPIO.output(22, GPIO.LOW)
-   #  print "SIX"
-   #  time.sleep(SleepTimeL);
-   #  GPIO.output(10, GPIO.LOW)
-   #  print "SEVEN"
-   #  time.sleep(SleepTimeL);
-   #  GPIO.output(9, GPIO.LOW)
-   #  print "EIGHT"
-   #  time.sleep(SleepTimeL);
+     #GPIO.output(4, GPIO.LOW)
+     #print "THREE"
+     #time.sleep(SleepTimeL);
+     #GPIO.output(17, GPIO.LOW)
+     #print "FOUR"
+     #time.sleep(SleepTimeL);
+     #GPIO.output(27, GPIO.LOW)
+     #print "FIVE"
+     #time.sleep(SleepTimeL);
+     #GPIO.output(22, GPIO.LOW)
+     #print "SIX"
+     #time.sleep(SleepTimeL);
+     #GPIO.output(10, GPIO.LOW)
+     #print "SEVEN"
+     #time.sleep(SleepTimeL);
+     #GPIO.output(9, GPIO.HIGH)
+     #print "EIGHT"
+     #time.sleep(SleepTimeL);
      GPIO.cleanup()
-     print "Good bye!"
+     #print "Good bye!"
 
    # End program cleanly with keyboard
    except KeyboardInterrupt:
@@ -54,6 +54,5 @@ def relay():
 
      # Reset GPIO settings
      GPIO.cleanup()
-
 
 
