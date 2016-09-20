@@ -92,10 +92,17 @@ def login():
    cur = conn.cursor()
    cur.execute("SELECT * from users where (u_name) =(%s)", [u_name])
    x= dict([("data", cur.fetchall())])
-   #pw_hash= jsonify(x).data[0][0][1]
+   print x['data'][0][1]
+   pw_hash=x['data'][0][1]
+   brypt.check_password_hash(pw_hash, password) 
+      #import jwt, Crypto.PublicKey.RSA as RSA, datetime
+      #key = RSA.generate(2048)
+      #payload = { 'foo': 'bar', 'wup': 90 };
+      #token = jwt.generate_jwt(payload, key, 'PS256', datetime.timedelta(minutes=5))
+      #header, claims = jwt.verify_jwt(token, key, ['PS256'])
+      #for k in payload: assert claims[k] == payload[k]
    conn.close()
-   #print bcrypt.check_password_hash(pw_hash, password)
-   return jsonify(x)
+   #sreturn jsonify(x)
    #bcrypt.check_password_hash(pw_hash, password)
 @app.after_request
 def after_request(response):
