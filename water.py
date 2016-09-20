@@ -17,12 +17,13 @@ def water():
    # time to sleep between operations in the main loop
 
    SleepTimeL = 5
+   SleepT2=3
 
    # main loop
 
    try:
      GPIO.output(2, GPIO.LOW)
-     time.sleep(SleepTimeL); 
+     time.sleep(SleepT2); 
      
      
      GPIO.output(3, GPIO.LOW)
