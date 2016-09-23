@@ -76,7 +76,7 @@ def turning ():
    conv = [pidata]
    s_data = json.dumps(conv)
 
-   return s_data
+   return "finished turn"
 
 @app.route('/data', methods=['GET'])
 def data():
