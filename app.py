@@ -9,7 +9,9 @@ from turn import turn
 from flask import jsonify
 from sensors import getserial
 from flask import request
-#import jwt
+from mycronfile import schedulingaturn
+from mycronfile import schedulingawater
+import json
 
 app = Flask(__name__)
 from flask.ext.bcrypt import Bcrypt
@@ -53,28 +55,28 @@ def watering ():
 def turning ():
    turn()
    #return "finished turn"
-   from sht1x.Sht1x import Sht1x
-   data = 24
-   clock = 23
+   #from sht1x.Sht1x import Sht1x
+   #data = 24
+   #clock = 23
 
     #print ">>> mysht1x = Sht1x(%d, %d, Sht1x.GPIO_BCM)" % (data,clock)
-   mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
+   #mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
 
     #print ">>> mysht1x.read_temperature_C()"
-   temp = mysht1x.read_temperature_C()
+   #temp = mysht1x.read_temperature_C()
     # print "temp", temp
 
-   rh = mysht1x.read_humidity()
+   #rh = mysht1x.read_humidity()
     #print "rh =",rh
 
 
-   dewPoint = mysht1x.calculate_dew_point(temp, rh)
+   #dewPoint = mysht1x.calculate_dew_point(temp, rh)
     #print "dewpoint=", dewPoint
 
 
-   pidata={"temp": temp, "humidity": rh, "dewPoint":dewPoint}
-   conv = [pidata]
-   s_data = json.dumps(conv)
+   #pidata={"temp": temp, "humidity": rh, "dewPoint":dewPoint}
+   #conv = [pidata]
+   #s_data = json.dumps(conv)
 
    return "finished turn"
 
@@ -91,48 +93,35 @@ def data():
    conn.close()
    return jsonify(x)
 
-@app.route('/register', methods=['POST'])
-
-def register():
-
-   userinfo=request.data.split("=")
-   password=userinfo[2]
-   u_name=userinfo[1].split("&")[0]
-   #print u_name, password
-   pw_hash = bcrypt.generate_password_hash(password)
-   #print pw_hash
-   conn = psql.connect("dbname=piData")
-   cur = conn.cursor()
-   cur.execute("INSERT into users(u_name, password, serial_id) VALUES (%s, %s, %s)", (u_name, pw_hash, getserial()))
-   conn.commit()
-   conn.close()
-   return "Inserted"
-@app.route('/login', methods=['POST'])
-def login():
-
-   print request.data
-   x=dict([("data", request.data)])
-
-
-   #userinfo=request.data.split(",")[0].split(":")[1]
-
-   password=request.data.split(",")[1].split(":")[1]
-   u_name=request.data.split(",")[0].split(":")[1]
-   conn = psql.connect("dbname=piData")
-   cur = conn.cursor()
-   cur.execute("SELECT * from users where (u_name) =(%s)", [u_name])
-   x= dict([("data", cur.fetchall())])
-   print x
-   pw_hash=x['data'][0][1]
-   if bcrypt.check_password_hash(pw_hash, password):
-      #import jwt
-      encoded1 = jwt.encode({'user': u_name}, 'secret', algorithm='HS256')
-      return encoded1
-   else:
-      return "boo"
-
-   conn.close()
-
+@app.route('/watersched', methods=['POST'])
+def waterschedule():
+ 
+   parsed_json = json.loads(request.data)
+   #print "1", request.data
+   #print "2", parsed_json['m']
+   mins= parsed_json['min']
+   hours=parsed_json['hours']
+   dom=parsed_json['dom']
+   print "dom", dom
+   m=parsed_json['m']
+   dow=parsed_json['dow']
+   #print request.data
+   schedulingawater(mins, hours, dom, m, dow);
+   return "did it!"
+@app.route('/turnsched', methods=['POST'])
+def turnschedule():
+ 
+   parsed_json = json.loads(request.data)
+   #print "1", request.data
+   #print "2", parsed_json['m']
+   mins= parsed_json['min']
+   hours=parsed_json['hours']
+   dom=parsed_json['dom']
+   m=parsed_json['m']
+   dow=parsed_json['dow']
+   #print request.data
+   schedulingaturn(mins, hours, dom, m, dow);
+   return "did it!"   
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')

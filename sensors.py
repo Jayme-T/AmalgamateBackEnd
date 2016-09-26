@@ -10,16 +10,16 @@ def gettemp():
 
    #print ">>> mysht1x.read_temperature_C()"
    temp = mysht1x.read_temperature_C()
-   #print temp
    #GPIO.cleanup()
    return temp
 def getrh():
    mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
    rh = mysht1x.read_humidity()
    #GPIO.cleanup()
+   #print "rh =",rh
    return rh
 
-#print "rh =",rh
+
 
 def getdewPoint(temp, rh):
    mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
