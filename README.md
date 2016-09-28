@@ -3,7 +3,7 @@
 This is a server used to get data from various sensors. For more information about how this is being used see www.amalgamatecompost.com 
 To use this API see the DOCS below
 
-``` 
+ 
 <div class="Documentation">
     <div class="documentationin">
         <h1> Composters API Documentation </h1>
@@ -107,4 +107,4 @@ To use this API see the DOCS below
 
     </div>
 
-</div>```
+</div>
