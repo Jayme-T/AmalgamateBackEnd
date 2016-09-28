@@ -18,7 +18,7 @@ from flask.ext.bcrypt import Bcrypt
 bcrypt=Bcrypt(app)
 @app.route('/test', methods=['GET'])
 def index():
-    return "test"
+    return jsonify({"result":"test"})
 
 @app.route('/')
 def test():
@@ -42,43 +42,19 @@ def test():
 
 
     pidata={"temp": temp, "humidity": rh, "dewPoint":dewPoint}
-    conv = [pidata]
-    s_data = json.dumps(conv)
+    #conv = [pidata]
+    s_data = json.dumps(pidata)
 
     return s_data
 
 @app.route('/water', methods=['POST'])
 def watering ():
    water()
-   return "finished water"
+   return jsonify({"result":"finished water"})
 @app.route('/turn', methods=['POST'])
 def turning ():
    turn()
-   #return "finished turn"
-   #from sht1x.Sht1x import Sht1x
-   #data = 24
-   #clock = 23
-
-    #print ">>> mysht1x = Sht1x(%d, %d, Sht1x.GPIO_BCM)" % (data,clock)
-   #mysht1x = Sht1x(data, clock, Sht1x.GPIO_BCM)
-
-    #print ">>> mysht1x.read_temperature_C()"
-   #temp = mysht1x.read_temperature_C()
-    # print "temp", temp
-
-   #rh = mysht1x.read_humidity()
-    #print "rh =",rh
-
-
-   #dewPoint = mysht1x.calculate_dew_point(temp, rh)
-    #print "dewpoint=", dewPoint
-
-
-   #pidata={"temp": temp, "humidity": rh, "dewPoint":dewPoint}
-   #conv = [pidata]
-   #s_data = json.dumps(conv)
-
-   return "finished turn"
+   return jsonify({"result":"finished turn"})
 
 @app.route('/data', methods=['GET'])
 def data():
@@ -107,7 +83,7 @@ def waterschedule():
    dow=parsed_json['dow']
    #print request.data
    schedulingawater(mins, hours, dom, m, dow);
-   return "did it!"
+   return jsonify({"result":"did it!"})
 @app.route('/turnsched', methods=['POST'])
 def turnschedule():
  
@@ -121,7 +97,7 @@ def turnschedule():
    dow=parsed_json['dow']
    #print request.data
    schedulingaturn(mins, hours, dom, m, dow);
-   return "did it!"   
+   return jsonify({"result":"did it!"})   
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
